@@ -2,9 +2,9 @@
 
 -- Lucian: --
 
-Created PR: 
+Created PR: https://github.com/Release-Engineering-4/operation/pull/1
 
-Approved PR:
+Approved PR: https://github.com/Release-Engineering-4/RE-project-team-4/pull/1
 
 -- Ming: --
 

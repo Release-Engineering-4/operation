@@ -1,4 +1,4 @@
-operation: [https://github.com/Release-Engineering-4/operation]
+operation: https://github.com/Release-Engineering-4/operation
 
 model training: ...
 

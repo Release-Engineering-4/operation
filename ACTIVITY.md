@@ -8,9 +8,9 @@ Approved PR: https://github.com/Release-Engineering-4/RE-project-team-4/pull/1
 
 -- Ming: --
 
-Created PR:
+Created PR: https://github.com/Release-Engineering-4/model-training/pull/1
 
-Approved PR:
+Approved PR:https://github.com/Release-Engineering-4/model-training/pull/3
 
 -- Razvan: --
 
@@ -20,6 +20,6 @@ Approved PR: https://github.com/Release-Engineering-4/RE-project-team-4/pull/1
 
 -- Smruti: --
 
-Created PR:
+Created PR: https://github.com/Release-Engineering-4/model-training/pull/4
 
-Approved PR:
+Approved PR: https://github.com/Release-Engineering-4/model-training/pull/3

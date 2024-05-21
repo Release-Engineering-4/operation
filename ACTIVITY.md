@@ -49,3 +49,30 @@ Approved PR: https://github.com/Release-Engineering-4/app/pull/1
 Created PR: https://github.com/Release-Engineering-4/model-service/pull/1
 
 Approved PR: https://github.com/Release-Engineering-4/lib-ml/pull/1#pullrequestreview-2053147623
+
+## A3
+
+-- Lucian: --
+
+Created PR: https://github.com/Release-Engineering-4/app/pull/3
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/2
+
+-- Ming: --
+
+Created PR: https://github.com/Release-Engineering-4/app/pull/2
+
+Approved PR: https://github.com/Release-Engineering-4/operation/pull/4
+
+-- Razvan: --
+
+Created PR: https://github.com/Release-Engineering-4/operation/pull/4
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/3
+
+-- Smruti: --
+
+Created PR: https://github.com/Release-Engineering-4/app/pull/9
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/3
+

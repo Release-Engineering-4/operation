@@ -17,3 +17,7 @@ We implemented a pylint auditor with the dslinter plugin and set it up in a GitH
 ## Comments for A2:
 
 Implemented the basics for the `model-training`, `lib-ml`, `lib-version`, `model-service` and `app` repositories.
+
+## Comments for A3:
+
+Added vagrant Kubernetes playbook. Migrated the Docker containerisation to Kubernetes. Added monitoring with Prometheus.

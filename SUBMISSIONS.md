@@ -21,3 +21,7 @@ Implemented the basics for the `model-training`, `lib-ml`, `lib-version`, `model
 ## Comments for A3:
 
 Added vagrant Kubernetes playbook. Migrated the Docker containerisation to Kubernetes. Added monitoring with Prometheus.
+
+## Comments for A4:
+
+We added testing in the `model-training` and `model-service` repositories. Improved the monitoring in the `app`repository. Fix containerisation in the `model-service` repository. 

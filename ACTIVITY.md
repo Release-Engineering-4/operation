@@ -66,9 +66,9 @@ Approved PR: https://github.com/Release-Engineering-4/operation/pull/4
 
 -- Razvan: --
 
-Created PR: https://github.com/Release-Engineering-4/operation/pull/4
+Created PR: https://github.com/Release-Engineering-4/lib-ml/pull/3
 
-Approved PR: https://github.com/Release-Engineering-4/app/pull/3
+Approved PR: https://github.com/Release-Engineering-4/app/pull/11
 
 -- Smruti: --
 

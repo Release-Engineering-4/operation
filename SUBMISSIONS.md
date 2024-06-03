@@ -25,3 +25,7 @@ Added vagrant Kubernetes playbook. Migrated the Docker containerisation to Kuber
 ## Comments for A4:
 
 We added testing in the `model-training`, `lib-ml` and `model-service` repositories. Improved the monitoring in the `app`repository. Fix containerisation in the `model-service` repository. 
+
+## Comments for A5: 
+
+Improved testing and added reported coverage.

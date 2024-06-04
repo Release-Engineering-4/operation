@@ -1,9 +1,17 @@
 # controller.yml
 ---
 - name: Setup controller node 
-  hosts: controller
+  hosts: controller 
   
   tasks:
     - name: message out
       debug:
         msg: "This is a controller node"
+
+    - name: Intialize k3s control plane
+      become: true
+      shell: k3s server | tee /var/lib/rancher/k3s/server/node-token
+      args:
+        creates: /var/lib/rancher/k3s/server/node-token
+    
+    

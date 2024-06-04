@@ -7,4 +7,15 @@
     - name: message out
       debug:
         msg: "This is a worker node"
+    
+    - name: Get node token from controller
+      become: true
+      shell: cat /var/lib/rancher/k3s/server/node-token
+      register: node_token
+      delegate_to : controller
+
+    - name: Join k3s cluster
+      become: true
+      shell: k3s agent --server https://{{ controller_ip }}:6443 --token {{ node_token.stdout }}
+
 

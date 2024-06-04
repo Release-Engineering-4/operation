@@ -1,18 +1,9 @@
-  # controller.yml
-  ---
-  - name: Setup kubernetes controller Minikube
-    hosts: controller
-    vars:
-      master_node_ip: "192.168.56.2"
-    
-    tasks:
-      - name: Install Docker
-        become: true
-        apt:
-          name: docker.io
-          state: present
-
-      - name: Install Minikube
-        become: true
-        shell: curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-        
+# controller.yml
+---
+- name: Setup controller node 
+  hosts: controller
+  
+  tasks:
+    - name: message out
+      debug:
+        msg: "This is a controller node"

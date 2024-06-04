@@ -1,0 +1,54 @@
+# common.yml
+---
+- name: Install common dependencies
+  hosts: all
+  tasks:
+  - name: Update cache
+    become: true
+    apt:
+      update_cache: yes
+
+  - name: Install common dependencies
+    become: true
+    apt:
+      name: 
+        - curl 
+        - apt-transport-https 
+        - ca-certificates 
+        - software-properties-common 
+        - gpg
+      state: present
+
+
+
+  - name: Install Docker
+    become: true
+    apt:
+      name: docker.io
+      state: present
+
+  - name: get kubernetes apt key
+    become: true
+    shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  
+  - name: add kubernetes apt repository
+    become: true
+    shell: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+  - name: Update cache
+    become: true
+    apt:
+      update_cache: yes
+  
+  - name: Install kubernetes
+    become: true
+    apt:
+      name: 
+       - kubelet 
+       - kubeadm 
+       - kubectl
+      state: present
+
+  - name: Install k3d
+    become: true
+    shell: curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash

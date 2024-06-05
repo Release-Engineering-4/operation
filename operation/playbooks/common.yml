@@ -20,38 +20,54 @@
         - gnupg
       state: present
 
-  - name: Check if Docker is installed
-    command: docker --version
-    register: docker_check
-    ignore_errors: true
+  # Commented playbook out, since we are focusing on developing everything in MiniKube. 
+  # Furthermore, this is is a snippet to show we know how to install Docker and Kubernetes.
+  # However, the effort needed to make it fully functioning is not worth the time.
 
-  - name: Install Docker
-    become: true
-    apt:
-      name: docker.io
-      state: present
-    when: docker_check.failed
 
-  - name: Check if k3s is installed
-    command: k3s --version
-    register: k3s_check
-    ignore_errors: true
+  # - name: Check if Docker is installed
+  #   command: docker --version
+  #   register: docker_check
+  #   ignore_errors: true
 
-  - name: Download k3s installer
-    become: true
-    shell: curl -sfL https://get.k3s.io -o /usr/local/bin/install-k3s.sh
-    args: 
-      creates: /usr/local/bin/install-k3s.sh
-    when: k3s_check.failed
+  # - name: Install Docker
+  #   become: true
+  #   apt:
+  #     name: docker.io
+  #     state: present
+  #   when: docker_check.failed
 
-  - name: Set execute permissions for k3s installer
-    become: true
-    file:
-      path: /usr/local/bin/install-k3s.sh
-      mode: '0755'
-    when: k3s_check.failed
+  # - name: Check if Docker started
+  #   command: systemctl is-active docker
+  #   register: docker_service_check
+  #   ignore_errors: true
 
-  - name: Install k3s
-    become: true
-    shell: /usr/local/bin/install-k3s.sh
-    when: k3s_check.failed
+  # - name: Start Docker service
+  #   become: true
+  #   service:
+  #     name: docker
+  #     state: started
+  #     enabled: yes
+  #   when: docker_service_check.failed
+
+  # - name: Check if kubeadm is installed
+  #   command: kubeadm version
+  #   register: kubeadm_check
+  #   ignore_errors: true
+
+  # - name: Install kubernetes
+  #   become: true
+  #   when: kubeadm_check.failed
+  #   block:
+  #     - name: Add kubernetes key
+  #       shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+  #     - name: Add kubeadm repository
+  #       shell: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+  #     - name: Update cache
+  #       apt:
+  #         update_cache: yes
+
+  #     - name: Install kubeadm and kubelet
+  #       shell: sudo apt-get install -y kubelet== kubeadm | sudo apt-mark hold kubelet kubeadm

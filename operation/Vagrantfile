@@ -1,0 +1,54 @@
+# Controller configuration
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-24.04"
+  config.vm.box_version = "202404.26.0"
+
+  controller_ip = "192.168.56.3"
+  
+  config.vm.define "controller" do |controller|
+    controller.vm.hostname = "controller"
+    controller.vm.network "private_network", ip: controller_ip
+    
+    controller.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+      vb.cpus = 2
+    end
+    controller.vm.provision :ansible do |a|
+      a.playbook = "playbooks/common.yml"
+      a.inventory_path = "inventory.cfg"
+      a.verbose = true
+    end
+    controller.vm.provision :ansible do |a|
+      a.playbook = "playbooks/controller.yml"
+      a.inventory_path = "inventory.cfg"
+      a.verbose = true
+    end
+
+  end
+
+  # Worker configuration
+  N = 2
+  (1..N).each do |i|
+    config.vm.define "node#{i}" do |node|
+      node.vm.hostname = "node#{i}"
+      node.vm.network "private_network", ip: "192.168.56.#{i+3}"
+      
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "6144"
+        vb.cpus = 2
+      end
+      node.vm.provision :ansible do |a|
+        a.playbook = "playbooks/common.yml"
+        a.inventory_path = "inventory.cfg"
+        a.verbose = true
+      end
+      node.vm.provision :ansible do |a|
+        a.playbook = "playbooks/worker.yml"
+        a.inventory_path = "inventory.cfg"
+        a.extra_vars = {controller_ip: controller_ip}
+        a.groups = { "workers" => ["node#{i}"] }
+        a.verbose = true
+      end
+    end
+  end
+end

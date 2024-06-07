@@ -1,0 +1,73 @@
+# common.yml
+---
+- name: Install common dependencies
+  hosts: all
+  tasks:
+  - name: Update cache
+    become: true
+    apt:
+      update_cache: yes
+
+  - name: Install common dependencies
+    become: true
+    apt:
+      name: 
+        - curl 
+        - apt-transport-https 
+        - ca-certificates 
+        - software-properties-common 
+        - gpg
+        - gnupg
+      state: present
+
+  # Commented playbook out, since we are focusing on developing everything in MiniKube. 
+  # Furthermore, this is is a snippet to show we know how to install Docker and Kubernetes.
+  # However, the effort needed to make it fully functioning is not worth the time.
+
+
+  # - name: Check if Docker is installed
+  #   command: docker --version
+  #   register: docker_check
+  #   ignore_errors: true
+
+  # - name: Install Docker
+  #   become: true
+  #   apt:
+  #     name: docker.io
+  #     state: present
+  #   when: docker_check.failed
+
+  # - name: Check if Docker started
+  #   command: systemctl is-active docker
+  #   register: docker_service_check
+  #   ignore_errors: true
+
+  # - name: Start Docker service
+  #   become: true
+  #   service:
+  #     name: docker
+  #     state: started
+  #     enabled: yes
+  #   when: docker_service_check.failed
+
+  # - name: Check if kubeadm is installed
+  #   command: kubeadm version
+  #   register: kubeadm_check
+  #   ignore_errors: true
+
+  # - name: Install kubernetes
+  #   become: true
+  #   when: kubeadm_check.failed
+  #   block:
+  #     - name: Add kubernetes key
+  #       shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+  #     - name: Add kubeadm repository
+  #       shell: echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+  #     - name: Update cache
+  #       apt:
+  #         update_cache: yes
+
+  #     - name: Install kubeadm and kubelet
+  #       shell: sudo apt-get install -y kubelet== kubeadm | sudo apt-mark hold kubelet kubeadm

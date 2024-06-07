@@ -1,0 +1,10 @@
+# worker.yml
+---
+- name: Setup worker node
+  hosts: workers
+  
+  tasks:
+    - name: message out
+      debug:
+        msg: "This is a worker node"
+

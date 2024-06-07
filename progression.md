@@ -4,12 +4,12 @@
 3. **Code Quality**: Very Good / Excelent, we haev multiple linters
 
 # A2
-1.  **Setup of the GitHub Organization**: Fail, we need a better readme for deployment of the app
+1.  **Setup of the GitHub Organization**: Fail, we need a better readme for deployment of the app in operation repo
 2.  **Automated Release Process**: Excellent
 3. **Software Reuse in Lbraries**: Excellent
 4. **Exposing a Model via REST**: Excellent
 5. **Sensible Use Case**: Sufficient
-6. **Docker Compose Operation**: We never did this
+6. **Docker Compose Operation**: Sufficient for now
 
 # A4
 1. **Testing Framework**: Document how to run pytest still

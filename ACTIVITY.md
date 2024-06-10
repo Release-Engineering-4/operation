@@ -127,3 +127,29 @@ Approved PR: https://github.com/Release-Engineering-4/app/pull/13
 Created PR: https://github.com/Release-Engineering-4/app/pull/14
 
 Approved PR: https://github.com/Release-Engineering-4/app/pull/12
+
+## A6
+
+-- Lucian: --
+
+Created PR: https://github.com/Release-Engineering-4/model-training
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/17
+
+-- Ming: --
+
+Created PR: https://github.com/Release-Engineering-4/app/pull/17
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/16
+
+-- Razvan: --
+
+Created PR: https://github.com/Release-Engineering-4/operation/pull/9
+
+Approved PR: https://github.com/Release-Engineering-4/app/pull/17
+
+-- Smruti: --
+
+Created PR: https://github.com/Release-Engineering-4/app/pull/18
+
+Approved PR: https://github.com/Release-Engineering-4/operation/pull/9

@@ -5,11 +5,13 @@ services:
     image: ghcr.io/release-engineering-4/model-service:v0.0.3
     container_name: model_service
     ports:
-      - "8088:5000" 
+      - "5000:8080" 
 
   app_service:
     image: ghcr.io/release-engineering-4/app:main.main.latest
     container_name: app_container
     ports:
       - "8080:8080" 
+    environment:
+      MODEL_URL: http://localhost:5000/predict
 

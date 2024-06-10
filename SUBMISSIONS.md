@@ -29,3 +29,7 @@ We added testing in the `model-training`, `lib-ml` and `model-service` repositor
 ## Comments for A5: 
 
 Improved testing and added reported coverage.
+
+## Comments for A6: 
+
+More testing, writing for the report and writing READMEs.

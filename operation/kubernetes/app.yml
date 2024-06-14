@@ -1,26 +1,4 @@
-# kubernetes.yml
----
-apiVersion: model-service/v1
-kind: Deployment
-metadata:
-  name: model-service
-  labels:
-    app: model-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: model-service
-  template:
-    metadata:
-      labels:
-        app: model-service
-    spec:
-      containers:
-      - name: model-service-api
-        image: ghcr.io/release-engineering-4/model-service:latest
-        ports:
-        - containerPort: 9090
+# app.yml
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -40,9 +18,12 @@ spec:
     spec:
       containers:
       - name: app-api
-        image: ghcr.io/release-engineering-4/app:latest
+        image: ghcr.io/release-engineering-4/app:main.main.latest
         ports:
         - containerPort: 8080
+        env:
+        - name: MODEL_SERVICE_URL
+          value: "http://model-service:8080/predict"
 ---
 apiVersion: v1
 kind: Service
@@ -51,12 +32,11 @@ metadata:
   labels:
     app: app-serv
 spec:
-  # type: 
-  #   NodePort
   selector:
     app: app
   ports:
-    - port: 8080
+    - protocol: TCP
+      port: 8080
       targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1
@@ -81,4 +61,4 @@ spec:
     matchLabels:
       app: app-serv
   endpoints:
-    - interval: 30s
+    - interval: 30s 

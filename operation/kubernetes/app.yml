@@ -22,7 +22,7 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: MODEL_SERVICE_URL
+        - name: MODEL_URL
           value: "http://model-service:8080/predict"
 ---
 apiVersion: v1

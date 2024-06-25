@@ -4,7 +4,7 @@ metadata:
   name: app-virtualservice
 spec:
   hosts:
-  - "*"
+  - "*"  # this needs modified
   gateways:
   - app-gateway  
   http:
@@ -16,3 +16,14 @@ spec:
         host: app
         port:
           number: 8080
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    mirror:
+      host: app
+    timeout: 5s
+    maxConnections: 100
+    fault:
+      abort:
+        percent: 10  
+        httpStatus: 500 

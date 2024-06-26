@@ -14,9 +14,6 @@ spec:
     metadata:
       labels:
         app: model-service
-      # annotations:
-      #   prometheus.io/scrape: "true"
-      #   prometheus.io/port: "8080"
     spec:
       containers:
         - name: model-service
@@ -37,37 +34,11 @@ spec:
     metadata:
       labels:
         app: model-service-beta
-      # annotations:
-      #   prometheus.io/scrape: "true"
-      #   prometheus.io/port: "8080"
     spec:
       containers:
         - name: model-service-beta
           image: ghcr.io/release-engineering-4/model-service:v0.0.3
           ports: [ containerPort: 8080 ]
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: model-service-v2
-#   labels: { app: model-service , version: v2}
-# spec:
-#   # replicas: 2
-#   selector:
-#     matchLabels:
-#       app: model-service
-#   template:
-#     metadata:
-#       labels:
-#         app: model-service
-#       # annotations:
-#       #   prometheus.io/scrape: "true"
-#       #   prometheus.io/port: "8080"
-#     spec:
-#       containers:
-#         - name: model-service
-#           image: ghcr.io/release-engineering-4/model-service:v0.0.3 #to change to newer version
-#           ports: [ containerPort: 8080 ]  
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -89,7 +60,8 @@ spec:
     spec:
       containers:
         - name: app-api
-          image: ghcr.io/release-engineering-4/app:main.main.latest
+          # image: ghcr.io/release-engineering-4/app:main.main.latest
+          image: local-app:minikube
           ports: [ containerPort: 8080 ]
           env:
             - { name: MODEL_URL , value: "http://model-service:8080/predict" }
@@ -114,10 +86,13 @@ spec:
     spec:
       containers:
         - name: app-api
-          image: ghcr.io/release-engineering-4/app:main.main.latest
+          # image: ghcr.io/release-engineering-4/app:main.main.latest
+          image: local-app:minikube
           ports: [ containerPort: 8080 ]
           env:
             - { name: MODEL_URL , value: "http://model-service:8080/predict" }
+            - { name: MODEL_URL_BETA , value: "http://model-service-beta:8080/predict" }
+            - { name: BETA_TEST_FLAG, value: "True"}
 ---
 apiVersion: v1
 kind: Service
@@ -180,32 +155,6 @@ spec:
           weight: 80
         - destination: { host: app , subset: v2 }
           weight: 20
----
-# apiVersion: networking.istio.io/v1beta1
-# kind: VirtualService
-# metadata:
-#   name: model-service-vs
-# spec:
-#   hosts: [ model-service ]
-#   http:
-#     - match:
-#       - sourceLabels: { version: v2 }
-#       route:
-#       - destination: { host: model-service , subset: v2 }
-#     - route: # default route
-#       - destination: { host: model-service , subset: v1 }
-# ---
-# apiVersion: networking.istio.io/v1beta1
-# kind: DestinationRule
-# metadata:
-#   name: model-service-dr
-# spec:
-#   host: model-service
-#   subsets:
-#     - name: v1
-#       labels: { version: v1 }
-#     - name: v2
-#       labels: { version: v2 }
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule

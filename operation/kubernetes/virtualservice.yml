@@ -6,7 +6,7 @@ spec:
   hosts:
   - "*"  # this needs modified
   gateways:
-  - app-gateway  
+  - app-gateway  # change this to the current gateway name
   http:
   - match:
     - uri:

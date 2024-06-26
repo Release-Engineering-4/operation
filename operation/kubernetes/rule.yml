@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: app-destination-rule
+spec:
+  host: app
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 100
+        maxRequestsPerConnection: 5
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 1s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 10

@@ -1,0 +1,220 @@
+# istio-canary.yml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-service
+  labels: { app: model-service , version: v1}
+spec:
+  # replicas: 2
+  selector:
+    matchLabels:
+      app: model-service
+  template:
+    metadata:
+      labels:
+        app: model-service
+      # annotations:
+      #   prometheus.io/scrape: "true"
+      #   prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: model-service
+          image: ghcr.io/release-engineering-4/model-service:v0.0.3
+          ports: [ containerPort: 8080 ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: model-service-beta
+  labels: { app: model-service-beta , version: v2}
+spec:
+  # replicas: 2
+  selector:
+    matchLabels:
+      app: model-service-beta
+  template:
+    metadata:
+      labels:
+        app: model-service-beta
+      # annotations:
+      #   prometheus.io/scrape: "true"
+      #   prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: model-service-beta
+          image: ghcr.io/release-engineering-4/model-service:v0.0.3
+          ports: [ containerPort: 8080 ]
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: model-service-v2
+#   labels: { app: model-service , version: v2}
+# spec:
+#   # replicas: 2
+#   selector:
+#     matchLabels:
+#       app: model-service
+#   template:
+#     metadata:
+#       labels:
+#         app: model-service
+#       # annotations:
+#       #   prometheus.io/scrape: "true"
+#       #   prometheus.io/port: "8080"
+#     spec:
+#       containers:
+#         - name: model-service
+#           image: ghcr.io/release-engineering-4/model-service:v0.0.3 #to change to newer version
+#           ports: [ containerPort: 8080 ]  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-v1
+  labels: { app: app , version: v1}
+spec:
+  # replicas: 2
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: app-api
+          image: ghcr.io/release-engineering-4/app:main.main.latest
+          ports: [ containerPort: 8080 ]
+          env:
+            - { name: MODEL_URL , value: "http://model-service:8080/predict" }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-v2
+  labels: { app: app , version: v2}
+spec:
+  # replicas: 2
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: app-api
+          image: ghcr.io/release-engineering-4/app:main.main.latest
+          ports: [ containerPort: 8080 ]
+          env:
+            - { name: MODEL_URL , value: "http://model-service:8080/predict" }
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: app
+  labels: { app: app-serv , version: v1}
+spec:
+  selector:
+    app: app
+  ports:
+    - { name: http , port: 8080, targetPort: 8080 }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-service
+spec:
+  selector:
+    app: model-service
+  ports:
+    - { name: http , port: 8080, targetPort: 8080 }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: model-service-beta
+spec:
+  selector:
+    app: model-service-beta
+  ports:
+    - { name: http , port: 8080, targetPort: 8080 }
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: my-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port: { number: 80, name: http , protocol: HTTP }
+      hosts: [ "*" ]
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: my-entry-service
+spec:
+  gateways: [ my-gateway ]
+  hosts: [ "*" ]
+  http:
+    - match:
+      - uri:
+          prefix: /
+      route:
+        - destination:
+            host: app
+      route:
+        - destination: { host: app , subset: v1 }
+          weight: 80
+        - destination: { host: app , subset: v2 }
+          weight: 20
+---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: model-service-vs
+# spec:
+#   hosts: [ model-service ]
+#   http:
+#     - match:
+#       - sourceLabels: { version: v2 }
+#       route:
+#       - destination: { host: model-service , subset: v2 }
+#     - route: # default route
+#       - destination: { host: model-service , subset: v1 }
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: DestinationRule
+# metadata:
+#   name: model-service-dr
+# spec:
+#   host: model-service
+#   subsets:
+#     - name: v1
+#       labels: { version: v1 }
+#     - name: v2
+#       labels: { version: v2 }
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: app-dr
+spec:
+  host: app
+  subsets:
+    - name: v1
+      labels: { version: v1 }
+    - name: v2
+      labels: { version: v2 }

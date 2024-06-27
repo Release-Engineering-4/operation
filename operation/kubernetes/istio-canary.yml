@@ -6,7 +6,6 @@ metadata:
   name: model-service
   labels: { app: model-service , version: v1}
 spec:
-  # replicas: 2
   selector:
     matchLabels:
       app: model-service
@@ -27,7 +26,6 @@ metadata:
   name: model-service-beta
   labels: { app: model-service-beta , version: v2}
 spec:
-  # replicas: 2
   selector:
     matchLabels:
       app: model-service-beta
@@ -48,7 +46,6 @@ metadata:
   name: app-v1
   labels: { app: app , version: v1}
 spec:
-  # replicas: 2
   selector:
     matchLabels:
       app: app
@@ -74,7 +71,6 @@ metadata:
   name: app-v2
   labels: { app: app , version: v2}
 spec:
-  # replicas: 2
   selector:
     matchLabels:
       app: app

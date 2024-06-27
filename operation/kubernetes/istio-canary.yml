@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app: model-service
+        version: v1
     spec:
       containers:
         - name: model-service
@@ -34,10 +35,11 @@ spec:
     metadata:
       labels:
         app: model-service-beta
+        version: v2
     spec:
       containers:
         - name: model-service-beta
-          image: ghcr.io/release-engineering-4/model-service:v0.0.3
+          image: ghcr.io/release-engineering-4/model-service:v0.0.4
           ports: [ containerPort: 8080 ]
 ---
 apiVersion: apps/v1
@@ -54,14 +56,14 @@ spec:
     metadata:
       labels:
         app: app
+        version: v1
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
       containers:
         - name: app-api
-          # image: ghcr.io/release-engineering-4/app:main.main.latest
-          image: local-app:minikube
+          image: ghcr.io/release-engineering-4/app:latest
           ports: [ containerPort: 8080 ]
           env:
             - { name: MODEL_URL , value: "http://model-service:8080/predict" }
@@ -80,14 +82,14 @@ spec:
     metadata:
       labels:
         app: app
+        version: v2
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
     spec:
       containers:
         - name: app-api
-          # image: ghcr.io/release-engineering-4/app:main.main.latest
-          image: local-app:minikube
+          image: ghcr.io/release-engineering-4/app:latest
           ports: [ containerPort: 8080 ]
           env:
             - { name: MODEL_URL , value: "http://model-service:8080/predict" }
@@ -128,7 +130,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: my-gateway
+  name: app-gateway
 spec:
   selector:
     istio: ingressgateway
@@ -141,7 +143,7 @@ kind: VirtualService
 metadata:
   name: my-entry-service
 spec:
-  gateways: [ my-gateway ]
+  gateways: [ app-gateway ]
   hosts: [ "*" ]
   http:
     - match:
@@ -152,9 +154,9 @@ spec:
             host: app
       route:
         - destination: { host: app , subset: v1 }
-          weight: 80
+          weight: 90
         - destination: { host: app , subset: v2 }
-          weight: 20
+          weight: 10
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
